@@ -66,7 +66,7 @@ function sendForm() {
   };
 
   if (isEditing) {
-    fetch(`https://fake-api-vq1l.onrender.com/posts/${productId}`, {
+    fetch(`https://backapi-q1wm.onrender.com/users/${productId}`, {
       method: "PATCH",
       headers: {
         "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQsImVtYWlsIjoiZXNuZWlkZXIuY2Fsdm9AdXRwLmVkdS5jbyIsImlhdCI6MTcyNzMwODkzNiwiZXhwIjoxNzQ0NTg4OTM2fQ.2h5a3MPpaCb9NdSVD3bxGBmwwGYQ04AaqPypE2HSYJg",
@@ -81,7 +81,7 @@ function sendForm() {
       })
       .catch(err => console.error("Error al actualizar el producto", err));
   } else {
-    fetch("https://fake-api-vq1l.onrender.com/posts", {
+    fetch("https://backapi-q1wm.onrender.com/users", {
       method: "POST",
       headers: {
         "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQsImVtYWlsIjoiZXNuZWlkZXIuY2Fsdm9AdXRwLmVkdS5jbyIsImlhdCI6MTcyNzMwODkzNiwiZXhwIjoxNzQ0NTg4OTM2fQ.2h5a3MPpaCb9NdSVD3bxGBmwwGYQ04AaqPypE2HSYJg",
@@ -100,7 +100,7 @@ function sendForm() {
 
 //Cargar los datos del producto a editar
 function loadProductData(id) {
-  fetch(`https://fake-api-vq1l.onrender.com/posts/${id}`, {
+  fetch(`https://backapi-q1wm.onrender.com/users/${id}`, {
     method: "GET",
     headers: {
       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQsImVtYWlsIjoiZXNuZWlkZXIuY2Fsdm9AdXRwLmVkdS5jbyIsImlhdCI6MTcyNzMwODkzNiwiZXhwIjoxNzQ0NTg4OTM2fQ.2h5a3MPpaCb9NdSVD3bxGBmwwGYQ04AaqPypE2HSYJg"
@@ -141,7 +141,7 @@ function loadProductData(id) {
 
 //Eliminar un producto
 function deletePost(id) {
-  fetch(`https://fake-api-vq1l.onrender.com/posts/${id}`, {
+  fetch(`https://backapi-q1wm.onrender.com/users/${id}`, {
     method: "DELETE",
     headers: {
       "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQsImVtYWlsIjoiZXNuZWlkZXIuY2Fsdm9AdXRwLmVkdS5jbyIsImlhdCI6MTcyNzMwODkzNiwiZXhwIjoxNzQ0NTg4OTM2fQ.2h5a3MPpaCb9NdSVD3bxGBmwwGYQ04AaqPypE2HSYJg",
