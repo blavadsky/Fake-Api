@@ -1,8 +1,28 @@
+function apiRequest(endpoint, method, data = null) {
+  const token = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJnaWQiOiI5Zjc3NTFhNi1jYTZmLTQ2MzItYTgxYS1hZTc0NGNiNmVjYTEiLCJpYXQiOjE3MjkzMDUxNjV9.VotboVZbauNsLgHLyk7OswVjYoVvrgxuUIM2BL6jsVMT7f72AaM7sUlqm6YXbS0-yThNrf6IWwiv_5LMIZovCg';
 
-fetch( "https://backapi-q1wm.onrender.com/users/", {
+  const options = {
+    method: method,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  };
+
+  if (data) {
+    options.body = JSON.stringify(data);
+  }
+
+  return fetch(`https://backapi-q1wm.onrender.com/users${endpoint}`, options)
+    .then(response => response.json())
+    .catch(err => console.error('Error de red:', err));
+}
+
+
+fetch("https://backapi-q1wm.onrender.com/users/", {
   method: "GET",
   headers: {
-    "Authorization": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJnaWQiOiI5Zjc3NTFhNi1jYTZmLTQ2MzItYTgxYS1hZTc0NGNiNmVjYTEiLCJpYXQiOjE3MjkzMDUxNjV9.VotboVZbauNsLgHLyk7OswVjYoVvrgxuUIM2BL6jsVMT7f72AaM7sUlqm6YXbS0-yThNrf6IWwiv_5LMIZovCg"
+    "Authorization": "Bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJnaWQiOiI5Zjc3NTFhNi1jYTZmLTQ2MzItYTgxYS1hZTc0NGNiNmVjYTEiLCJpYXQiOjE3MjkzMDUxNjV9.VotboVZbauNsLgHLyk7OswVjYoVvrgxuUIM2BL6jsVMT7f72AaM7sUlqm6YXbS0-yThNrf6IWwiv_5LMIZovCg", // Token de autorización
   }
 })
 
@@ -25,6 +45,7 @@ fetch( "https://backapi-q1wm.onrender.com/users/", {
         </div>
       </div>
     `;
+      console.log(contact);
       il.innerHTML = myhtml;
       il.style.display = "block";
       list.appendChild(il);
@@ -32,97 +53,70 @@ fetch( "https://backapi-q1wm.onrender.com/users/", {
   })
   .catch(err => console.error("Error al cargar los usuarios", err));
 
-  let isEditing = false;
+let isEditing = false;
 
-  document.querySelector('.btn-primary[data-bs-target="#staticBackdrop"]').addEventListener('click', () => {
-    document.getElementById("tituloModal").textContent = "Agregar NFT";
-    clearForm();
-    isEditing = false;
-  });
+document.querySelector('.btn-primary[data-bs-target="#staticBackdrop"]').addEventListener('click', () => {
+  document.getElementById("tituloModal").textContent = "Agregar NFT";
+  clearForm();
+  isEditing = false;
+});
 
-  function clearForm() {
-    document.getElementById("title").value = "";
-    document.getElementById("description").value = "";
-    document.getElementById("value").value = "";
-    document.getElementById("image").value = "";
-    document.getElementById("productId").value = "";
+function clearForm() {
+  document.getElementById("title").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("value").value = "";
+  document.getElementById("image").value = "";
+  document.getElementById("productId").value = "";
+}
+
+
+function sendForm() {
+  const nftData = {
+    first_name: document.getElementById('title').value,
+    last_name: document.getElementById('description').value,
+    email: document.getElementById('value').value,
+    phone: document.getElementById('image').value,
+  };
+
+  const productId = document.getElementById('productId').value;
+
+  if (!nftData.first_name || !nftData.last_name || !nftData.email || !nftData.phone) {
+    alert('Por favor, completa todos los campos.');
+    return;
   }
+  const endpoint = isEditing ? `/${productId}` : '';
+  const method = isEditing ? 'PATCH' : 'POST';
 
-  function sendForm() {
-    const firstName = document.getElementById("title").value;  // Nombre del NFT (o usuario)
-    const lastName = document.getElementById("description").value; // Descripción
-    const email = document.getElementById("value").value;  // Precio o email
-    const phone = document.getElementById("image").value;  // URL de la imagen o teléfono
-    const userId = document.getElementById("productId").value; // ID del usuario
-  
-    if (!firstName || !lastName || !email || !phone) {
-      alert("Por favor, completa todos los campos.");
-      return;
+  apiRequest(endpoint, method, nftData)
+    .then(response => {
+      console.log(`${isEditing ? 'Editado' : 'Creado'} exitosamente`, response);
+      location.reload(); 
+    });
+}
+
+function loadUserData(contact_id) {
+  console.log("ID del usuario para editar:", contact_id);
+  fetch(`https://backapi-q1wm.onrender.com/users/${contact_id}`, {
+    method: "GET",
+    headers: {
+      "Authorization": "Bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJnaWQiOiI5Zjc3NTFhNi1jYTZmLTQ2MzItYTgxYS1hZTc0NGNiNmVjYTEiLCJpYXQiOjE3MjkzMDUxNjV9.VotboVZbauNsLgHLyk7OswVjYoVvrgxuUIM2BL6jsVMT7f72AaM7sUlqm6YXbS0-yThNrf6IWwiv_5LMIZovCg", // Token de autorización
+      "Content-Type": "application/json"
     }
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log("Datos del usuario para editar:", data);
+      document.getElementById("title").value = data.first_name;
+      document.getElementById("description").value = data.last_name;
+      document.getElementById("value").value = data.email;
+      document.getElementById("image").value = data.phone;
+      document.getElementById("productId").value = data.contact_id;
 
-    const userData = {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      phone: phone
-    };
-
-    if (isEditing) {
-      fetch(`https://backapi-q1wm.onrender.com/users/${userId}`, {
-        method: "PATCH",
-        headers: {
-          "Authorization": "Bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJnaWQiOiI5Zjc3NTFhNi1jYTZmLTQ2MzItYTgxYS1hZTc0NGNiNmVjYTEiLCJpYXQiOjE3MjkzMDUxNjV9.VotboVZbauNsLgHLyk7OswVjYoVvrgxuUIM2BL6jsVMT7f72AaM7sUlqm6YXbS0-yThNrf6IWwiv_5LMIZovCg", // Token de autorización
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(userData)
-      })
-        .then(res => res.json())
-        .then(res => {
-          console.log("Usuario actualizado", res);
-          location.reload(); 
-        })
-        .catch(err => console.error("Error al actualizar el usuario", err));
-    } else {
-      fetch("https://backapi-q1wm.onrender.com/users", {
-        method: "POST",
-        headers: {
-          "Authorization": "Bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJnaWQiOiI5Zjc3NTFhNi1jYTZmLTQ2MzItYTgxYS1hZTc0NGNiNmVjYTEiLCJpYXQiOjE3MjkzMDUxNjV9.VotboVZbauNsLgHLyk7OswVjYoVvrgxuUIM2BL6jsVMT7f72AaM7sUlqm6YXbS0-yThNrf6IWwiv_5LMIZovCg", // Token de autorización
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(userData)
-      })
-        .then(res => res.json())
-        .then(res => {
-          console.log("Usuario creado", res);
-          location.reload(); 
-        })
-        .catch(err => console.error("Error al crear el usuario", err));
-    }
-  }
-
-  function loadUserData(contact_id) {
-    console.log("ID del usuario para editar:", contact_id);
-    fetch(`https://backapi-q1wm.onrender.com/users/${contact_id}`, {
-      method: "GET",
-      headers: {
-        "Authorization": "Bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJnaWQiOiI5Zjc3NTFhNi1jYTZmLTQ2MzItYTgxYS1hZTc0NGNiNmVjYTEiLCJpYXQiOjE3MjkzMDUxNjV9.VotboVZbauNsLgHLyk7OswVjYoVvrgxuUIM2BL6jsVMT7f72AaM7sUlqm6YXbS0-yThNrf6IWwiv_5LMIZovCg", // Token de autorización
-        "Content-Type": "application/json"
-      }
+      isEditing = true;
+      document.getElementById("tituloModal").textContent = "Editar NFT";
     })
-      .then(response => response.json())
-      .then(data => {
-        console.log("Datos del usuario para editar:", data);
-        document.getElementById("title").value = data.first_name;
-        document.getElementById("description").value = data.last_name;
-        document.getElementById("value").value = data.email;
-        document.getElementById("image").value = data.phone;
-        document.getElementById("productId").value = data.contact_id; 
-  
-        isEditing = true; 
-        document.getElementById("tituloModal").textContent = "Editar Usuario"; // Cambiar el título del modal
-      })
-      .catch(err => console.error("Error al cargar el usuario", err));
-  }
+    .catch(err => console.error("Error al cargar el usuario", err));
+}
 
 
 function deleteUser(contact_id) {
@@ -135,7 +129,7 @@ function deleteUser(contact_id) {
     .then(res => res.json())
     .then(res => {
       console.log("Usuario eliminado", res);
-      location.reload(); 
+      location.reload();
     })
     .catch(err => console.error("Error al eliminar el usuario", err));
 }

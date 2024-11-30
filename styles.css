@@ -1,0 +1,46 @@
+/* styles.css */
+
+/* Estilo para el contenedor del modal */
+.modal-container {
+    background-color: rgba(6, 0, 70, 0.933);
+    position: relative;
+    border: 3px solid black;
+  }
+  
+  /* Estilos para la barra de navegación */
+  .navbar {
+    background-color: rgba(6, 0, 70, 0.933);
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .navbar .btn {
+    margin-left: 45px;
+  }
+  
+  /* Estilos del título principal */
+  .main-heading {
+    text-align: center;
+    color: white;
+    font-family: 'Arial', sans-serif;
+    padding-top: 15px;
+    font-size: 3rem;
+  }
+  
+  /* Estilos para la lista de NFTs */
+  .nft-list {
+    display: flex;
+    justify-content: center;  /* Centra horizontalmente */
+    flex-wrap: wrap;
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+  
+  /* Puedes agregar más estilos según tus necesidades */
+  
